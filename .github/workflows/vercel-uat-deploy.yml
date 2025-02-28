@@ -1,0 +1,25 @@
+name: Deploy to Vercel (UAT)
+
+on:
+  workflow_run:
+    workflows: ["Deploy to Vercel (Production)"]
+    types:
+      - completed
+
+jobs:
+  deploy-uat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to UAT
+        run: vercel --token=${{ secrets.VERCEL_TOKEN }}
